@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const auth = require('../middlewares/auth');
-
+const createUserLimiter = require('../rateLimiter/rateLimiter');
+const loginUserLimiter = require('../rateLimiter/rateLimiter');
 const {
   createUser,
   updateUserProfile,
@@ -12,6 +13,7 @@ const {
 
 router.post(
   '/signup',
+  createUserLimiter,
   celebrate({
     body: Joi.object().keys({
       email: Joi.string().required().email(),
@@ -23,6 +25,7 @@ router.post(
 );
 router.post(
   '/signin',
+  loginUserLimiter,
   celebrate({
     body: Joi.object().keys({
       email: Joi.string().required().email(),
