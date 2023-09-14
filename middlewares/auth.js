@@ -6,7 +6,7 @@ let JWT_SECRET = '';
 if (process.env.NODE_ENV === 'production') { JWT_SECRET = process.env.JWT_SECRET; } else { JWT_SECRET = 'cibirkulimay'; }
 
 module.exports = (req, res, next) => {
-  if (!req.cookies.jwt) next(new UNAUTHORIZED_ERROR('Необходима авторизация'));
+  if (!req.cookies.jwt) next(new UNAUTHORIZED_ERROR(`Необходима авторизация //  test: ${process.env.TEST}`)); // проверяю подключен ли .env
   const token = req.cookies.jwt;
   let payload;
   try {
