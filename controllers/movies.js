@@ -39,7 +39,7 @@ function deleteMovies(req, res, next) {
         .then((movieDelete) => {
           res
             .status(SUCCESS)
-            .send({ message: `${movieDelete.nameRU} успешно удалён` });
+            .send(movieDelete);
         })
         .catch(next);
     })
