@@ -8,13 +8,13 @@ const limiter = rateLimit({
 
 const createUserLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  limit: 10, // Limit each IP to 5 requests per `window` (here, per 15 minutes)
+  limit: 10000, // Limit each IP to 5 requests per `window` (here, per 15 minutes)
   message: 'Лимит попыток на создание пользователя 5, попробуйте через 15 минут',
 });
 
 const loginUserLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  limit: 10, // Limit each IP to 5 requests per `window` (here, per 15 minutes)
+  limit: 10000, // Limit each IP to 5 requests per `window` (here, per 15 minutes)
   message: 'Лимит попыток на вход пользователя 5, попробуйте через 15 минут',
 });
 
