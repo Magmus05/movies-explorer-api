@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'production') { JWT_SECRET = process.env.JWT_SECRET
 module.exports = (req, res, next) => {
   console.log('req.cookies.jwt в самом начале');
   console.log(req.cookies.jwt);
-  console.log(req);
+  console.log(req.cookies);
   if (!req.cookies.jwt) next(new UNAUTHORIZED_ERROR(`Необходима авторизация //  test: ${process.env.TEST}`)); // проверяю подключен ли .env
   console.log('константа jwt');
   console.log(jwt);

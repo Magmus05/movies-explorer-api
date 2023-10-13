@@ -70,7 +70,6 @@ async function login(req, res, next) {
           expiresIn: '7d',
         },
       );
-      // res.clearCookie('jwt')
       res.cookie('jwt', token);
       return res
         .status(SUCCESS)
