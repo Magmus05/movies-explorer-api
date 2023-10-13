@@ -83,6 +83,8 @@ async function login(req, res, next) {
 }
 
 function currentUser(req, res, next) {
+  console.log('currentUser проверка токена');
+  console.log(req.user);
   console.log(req.user._id);
   User.findById(req.user._id)
     .orFail(new Error('NotValidId'))
