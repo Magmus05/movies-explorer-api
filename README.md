@@ -1,4 +1,4 @@
-# Проект Димлом
+# Проект Диплом
 
 ссылка : api.magmus-dip.nomoredomainsicu.ru
 
