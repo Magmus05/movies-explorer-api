@@ -49,7 +49,7 @@ app.use(handleErrors); // централизованный обработчик 
 mongoose.connect(DB_URL_DIP, {
   useNewUrlParser: true,
   useUnifiedTopology: false,
-});
+}).then(() => console.log('MongoDB connected')).catch((err) => console.error(err));
 
 app.listen(PORT_DIP, () => {
   console.log(`слушаем порт: ${PORT_DIP} ${process.env.TEST}`);
