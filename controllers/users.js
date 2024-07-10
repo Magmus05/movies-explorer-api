@@ -1,22 +1,23 @@
-require("dotenv").config();
-const bcrypt = require("bcrypt");
-const JWT = require("jsonwebtoken");
-const User = require("../models/user");
-const NOT_FOUND_ERROR = require("../errors/NotFoundError");
-const BAD_REQUEST_ERROR = require("../errors/BadRequestError");
-const CONFLICT_ERROR = require("../errors/ConflictError");
+require('dotenv').config();
+const bcrypt = require('bcrypt');
+const JWT = require('jsonwebtoken');
+const User = require('../models/user');
+const NOT_FOUND_ERROR = require('../errors/NotFoundError');
+const BAD_REQUEST_ERROR = require('../errors/BadRequestError');
+const CONFLICT_ERROR = require('../errors/ConflictError');
 
 const SUCCESS = 200;
 const CREATE = 201;
 
-let JWT_SECRET = "";
-if (process.env.NODE_ENV === "production") {
+let JWT_SECRET = '';
+if (process.env.NODE_ENV === 'production') {
   JWT_SECRET = process.env.JWT_SECRET;
 } else {
-  JWT_SECRET = "cibirkulimay";
+  JWT_SECRET = 'cibirkulimay';
 }
 
 async function createUser(req, res, next) {
+  console.log(req.body);
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
@@ -28,7 +29,10 @@ async function createUser(req, res, next) {
           });
         })
         .catch((err) => {
-          if (err.code === 11000) next(new CONFLICT_ERROR('Пользователь с данным email уже существует'));
+          if (err.code === 11000)
+            next(
+              new CONFLICT_ERROR('Пользователь с данным email уже существует')
+            );
           if (err.name === 'ValidationError') {
             next(new BAD_REQUEST_ERROR(`${err.message}`));
           } else {
@@ -53,8 +57,8 @@ function updateUserProfile(req, res, next) {
     })
     .catch((err) => {
       if (err.code === 11000)
-        next(new CONFLICT_ERROR("Пользователь с данным email уже существует"));
-      if (err.name === "ValidationError") {
+        next(new CONFLICT_ERROR('Пользователь с данным email уже существует'));
+      if (err.name === 'ValidationError') {
         next(new BAD_REQUEST_ERROR(`${err.message}`));
       } else {
         next(err);
@@ -69,25 +73,26 @@ async function login(req, res, next) {
     .then((user) => {
       // аутентификация успешна! пользователь в переменной user
       const token = JWT.sign({ _id: user._id.valueOf() }, JWT_SECRET, {
-        expiresIn: "7d",
+        expiresIn: '7d',
       });
-      res.cookie("jwt", token);
+      console.log("tok", token);
+      res.cookie('jwt', token);
       return res
         .status(SUCCESS)
-        .send({ message: "Авторизация прошла ", email: user.email });
+        .send({ message: 'Авторизация прошла ', email: user.email });
     })
     .catch(next);
 }
 
 function currentUser(req, res, next) {
   User.findById(req.user._id)
-    .orFail(new Error("NotValidId"))
+    .orFail(new Error('NotValidId'))
     .then((user) => {
       res.status(SUCCESS).send(user);
     })
     .catch((err) => {
-      if (err.message === "NotValidId") {
-        next(new NOT_FOUND_ERROR("Такой ID не существует"));
+      if (err.message === 'NotValidId') {
+        next(new NOT_FOUND_ERROR('Такой ID не существует'));
       } else {
         next(err);
       }
@@ -96,9 +101,9 @@ function currentUser(req, res, next) {
 
 function loginOutUser(req, res) {
   res
-    .clearCookie("jwt")
+    .clearCookie('jwt')
     .status(SUCCESS)
-    .send({ message: "Вы вышли из аккаунта" });
+    .send({ message: 'Вы вышли из аккаунта' });
 }
 
 module.exports = {
