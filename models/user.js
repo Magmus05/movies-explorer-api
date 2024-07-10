@@ -31,12 +31,12 @@ userSchema.statics.findUserByCredentials = function (email, password, next) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new UNAUTHORIZED_ERROR('Неправильные почта или пароль1'));
+        return Promise.reject(new UNAUTHORIZED_ERROR('Неправильные почта или пароль'));
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new UNAUTHORIZED_ERROR('Неправильные почта или пароль2'));
+            return Promise.reject(new UNAUTHORIZED_ERROR('Неправильные почта или пароль'));
           }
 
           return user;
