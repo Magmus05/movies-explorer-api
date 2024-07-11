@@ -1,0 +1,20 @@
+version: '3' # версия синтаксиса
+services:
+ movies-explorer-api: # Сервер Express
+    build: .
+    container_name: server
+    ports:
+      - '3001:3001'
+    depends_on:
+      - mongo
+    environment:
+      DB_URL_DIP: 'mongodb://mongo:27017/bitfilmsdb'
+ mongo: # База данных
+    image: mongo
+    container_name: bd
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+volumes:
+  mongo-data:

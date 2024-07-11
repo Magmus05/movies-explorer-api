@@ -10,9 +10,13 @@ const SUCCESS = 200;
 const CREATE = 201;
 
 let JWT_SECRET = '';
-if (process.env.NODE_ENV === 'production') { JWT_SECRET = process.env.JWT_SECRET; } else { JWT_SECRET = 'cibirkulimay'; }
+if (process.env.NODE_ENV === 'production') {
+  JWT_SECRET = process.env.JWT_SECRET;
+} else {
+  JWT_SECRET = 'cibirkulimay';
+}
 
-function createUser(req, res, next) {
+async function createUser(req, res, next) {
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
@@ -24,7 +28,10 @@ function createUser(req, res, next) {
           });
         })
         .catch((err) => {
-          if (err.code === 11000) next(new CONFLICT_ERROR('Пользователь с данным email уже существует'));
+          if (err.code === 11000)
+            next(
+              new CONFLICT_ERROR('Пользователь с данным email уже существует')
+            );
           if (err.name === 'ValidationError') {
             next(new BAD_REQUEST_ERROR(`${err.message}`));
           } else {
@@ -42,13 +49,14 @@ function updateUserProfile(req, res, next) {
       name: req.body.name,
       email: req.body.email,
     },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   )
     .then((user) => {
       res.status(SUCCESS).send(user);
     })
     .catch((err) => {
-      if (err.code === 11000) next(new CONFLICT_ERROR('Пользователь с данным email уже существует'));
+      if (err.code === 11000)
+        next(new CONFLICT_ERROR('Пользователь с данным email уже существует'));
       if (err.name === 'ValidationError') {
         next(new BAD_REQUEST_ERROR(`${err.message}`));
       } else {
@@ -59,17 +67,13 @@ function updateUserProfile(req, res, next) {
 
 async function login(req, res, next) {
   const { email, password } = req.body;
+
   return User.findUserByCredentials(email, password, next)
     .then((user) => {
       // аутентификация успешна! пользователь в переменной user
-      const token = JWT.sign(
-        { _id: user._id.valueOf() },
-        JWT_SECRET,
-        {
-          expiresIn: '7d',
-        },
-      );
-      // res.clearCookie('jwt')
+      const token = JWT.sign({ _id: user._id.valueOf() }, JWT_SECRET, {
+        expiresIn: '7d',
+      });
       res.cookie('jwt', token);
       return res
         .status(SUCCESS)
