@@ -59,8 +59,6 @@ function updateUserProfile(req, res, next) {
 
 async function login(req, res, next) {
   const { email, password } = req.body;
-  console.log(req.body);
-  console.log(req.body.email);
   return User.findUserByCredentials(email, password, next)
     .then((user) => {
       // аутентификация успешна! пользователь в переменной user
@@ -72,8 +70,6 @@ async function login(req, res, next) {
         },
       );
       // res.clearCookie('jwt')
-      console.log('login');
-      console.log(token);
       res.cookie('jwt', token);
       return res
         .status(SUCCESS)
@@ -83,7 +79,6 @@ async function login(req, res, next) {
 }
 
 function currentUser(req, res, next) {
-  console.log(req.user._id);
   User.findById(req.user._id)
     .orFail(new Error('NotValidId'))
     .then((user) => {

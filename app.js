@@ -18,10 +18,10 @@ const auth = require('./middlewares/auth');
 const NOT_FOUND_ERROR = require('./errors/NotFoundError');
 const handleErrors = require('./middlewares/handleErrors');
 
-const { PORT_DIP = 3001, DB_URL_DIP = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
+const { PORT_DIP = 3002, DB_URL_DIP = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-app.use(cors({ origin: ['http://localhost:3000', 'https://magmus-dip.nomoredomainsicu.ru', 'http://magmus-dip.nomoredomainsicu.ru'], credentials: true, maxAge: 30 })); //
+app.use(cors({ origin: ['http://localhost:3000', 'https://dip.magmus-web.ru'], credentials: true, maxAge: 30 })); //
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(requestLogger); // логгер запросов
