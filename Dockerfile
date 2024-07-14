@@ -9,7 +9,7 @@ COPY package*.json ./
 
 # Устанавливаем зависимости
 RUN npm install
-
+RUN npm install -g pm2
 # Копируем оставшееся приложение в контейнер
 COPY . .
 
@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 3001
 
 # Запускаем сервер
-CMD [ "npm", "start" ]
+CMD ["pm2-runtime", "start", "app.js"]
